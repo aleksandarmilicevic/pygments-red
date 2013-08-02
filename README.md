@@ -1,45 +1,40 @@
-* Pygments Red
+# Pygments Red
 
-Lexer for the Ruby Event-Driven (Red) research language from Software Design Group at MIT.
+Lexer for the Ruby Event-Driven (Red) language from Software Design Group at MIT.
 
-* Install
+# Installation
 
-** Using PyPI and pip
+## Using PyPI and pip 
 
-    $ (sudo) pip install pygments-rspec
+(might need sudo privileges)
 
-
-** Manual
-
-    $ git clone git://github.com/hugomaiavieira/pygments-rspec.git
-    $ cd pygments-rspec
-    $ (sudo) python setup.py install
+    pip install pygments-rspec
 
 
-* Using
+## Manual
 
-Just use the *red* "language".
+(might need sudo privileges to run the last command)
 
-
-* Extra information
-
-** Pygments supported languages
-
-Pygments at the moment supports over 150 different programming languages,
-template languages and other markup languages. To see an exhaustive list of the
-currently supported languages, use the command::
-
-    $ pygmentize -L lexers
-
-** Pygments styles avaible
+    git clone git://github.com/hugomaiavieira/pygments-rspec.git
+    cd pygments-rspec
+    python setup.py install
 
 
-To get a list of all available stylesheets, execute the following command on the
-command line::
+# Usage
 
-    $ pygmentize -L styles
+Just specify *red* as the target language when using Pygments.
 
-Please read the `official documentation`_ for further information on the usage
-of pygment styles.
 
-.. _official documentation: http://pygments.org/docs/
+# About Pygments
+
+To see the supported languages, execute:
+
+    pygmentize -L lexers
+
+To see the supported styles, execute:
+
+    pygmentize -L styles   
+
+
+    
+
