@@ -18,10 +18,15 @@ setup(
     install_requires=['pygments >= 1.4'],
 
     entry_points='''[pygments.lexers]
+                    redruby=pygments_red:RedRubyLexer
                     red=pygments_red:RedLexer
+                    errb=pygments_red:ErrbLexer
+                    ered=pygments_red:EredLexer
+                    redhtml=pygments_red:RedHtmlLexer
 
                     [pygments.styles]
-                    redstyle=pygments_red:RedStyle''',
+                    redstyle=pygments_red:RedStyle
+                    github=pygments_red:GithubStyle''',
 
     classifiers=[
     ],
