@@ -18,7 +18,10 @@ setup(
     install_requires=['pygments >= 1.4'],
 
     entry_points='''[pygments.lexers]
-                    red=pygments_red:RedLexer''',
+                    red=pygments_red:RedLexer
+
+                    [pygments.styles]
+                    redstyle=pygments_red:RedStyle''',
 
     classifiers=[
     ],
