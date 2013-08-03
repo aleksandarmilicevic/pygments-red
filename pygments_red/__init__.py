@@ -216,6 +216,9 @@ class RedStyle(Style):
 
 class GithubStyle(Style):
     default_style = ""
+
+    comment_color = '#8f5902' #'#777766'
+
     styles = {
         Comment:                      '#999988 italic',
         Error:                        '#a61717 bg:#e3d2d2',
@@ -246,7 +249,7 @@ class GithubStyle(Style):
         Name.Attribute:               '#008080',
         Name.Builtin:                 '#0086B3',
         Name.Class:                   '#445588 bold',
-        Name.Constant:                '#008080', #'#445588', # '#004380', #
+        Name.Constant:                '#008080',
         Name.Decorator:               '#3c5d5d bold',
         Name.Entity:                  '#800080',
         Name.Exception:               '#990000 bold',
@@ -272,9 +275,26 @@ class GithubStyle(Style):
         Literal.String.Regex:         '#009926',
         Literal.String.Single:        '#d01040',
         Literal.String.Symbol:        '#990073',
-        Name.Builtin.Pseudo:          '#004380 italic bold',
+        Name.Builtin.Pseudo:          '#999999',
         Name.Variable.Class:          '#008080',
         Name.Variable.Global:         '#008080',
         Name.Variable.Instance:       '#008080',
         Literal.Number.Integer.Long:  '#009999'
     }
+
+class GithubCustom1Style(Style):
+    default_style = ""
+
+    comment_color = '#8f5902' #'#777766'
+
+    styles = {}
+    styles.update(GithubStyle.styles)
+    styles.update({
+        Comment:                      comment_color + ' italic',
+        Comment.Multiline:            comment_color + ' italic',
+        Comment.Preproc:              comment_color + ' bold italic',
+        Comment.Single:               comment_color + ' italic',
+        Comment.Special:              comment_color + ' bold italic',
+        Name.Constant:                '#008080', #'#445588', # '#004380', 
+        Name.Builtin.Pseudo:          '#004380 italic bold'
+    })
