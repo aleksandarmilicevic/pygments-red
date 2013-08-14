@@ -92,7 +92,7 @@ class RedRubyLexer(RedLexerBase):
     tokens.update(RubyLexer.tokens)
 
     string_rules = tokens['strings']
-    string_rules[4] = (r'([a-zA-Z_][a-zA-Z0-9]*)(:)(?!:)', bygroups(String.Symbol, Token.Punctuation))
+    string_rules[4] = (r'([a-zA-Z_][a-zA-Z0-9_]*)(:)(?!:)', bygroups(String.Symbol, Token.Punctuation))
 
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
@@ -119,16 +119,21 @@ class RedLexer(RedRubyLexer):
     filenames = ['*.red'] # just to have one if you whant to use
 
     CLASS_GEN_KEYWORDS = ['abstract_record', 'abstract_machine', 'record', 'machine', 'event', 'policy']
-    OTHER_KEYWORDS = ['set', 'seq', 'requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'reject', 'refs', 'owns', 'fields']
+    OTHER_KEYWORDS = ['set', 'seq', 'requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields']
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OTHER_KEYWORDS
 
-    EMPH_FUNCS = ['render']
+    EMPH_STRONG_FUNCS = ['render']
+    EMPH_FUNCS = ['reject', 'unless', 'when']
 
     tokens = {}
     tokens.update(RedRubyLexer.tokens)
 
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
+
+        # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
+        if curr_token is Name and curr_value in self.EMPH_STRONG_FUNCS:
+            return (curr_idx, Keyword.Pseudo, curr_value)
 
         # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
         if curr_token is Name and curr_value in self.EMPH_FUNCS:
@@ -139,7 +144,10 @@ class RedLexer(RedRubyLexer):
             return (curr_idx, Keyword, curr_value)
 
         # convert Name.Constant tokens to Name.Class for names following Red class generating keywords
-        if curr_token is Name.Constant and _token(self.prev()) is Keyword and _value(self.prev()) in self.CLASS_GEN_KEYWORDS:
+        prev_token = _token(self.prev())
+        prev_is_keyword = (prev_token is Keyword) or (prev_token is Keyword.Pseudo)
+        prev_is_red_keyword = prev_is_keyword and _value(self.prev()) in self.CLASS_GEN_KEYWORDS
+        if curr_token is Name.Constant and prev_is_red_keyword:
             return (curr_idx, Name.Class, curr_value)
 
         return RedRubyLexer.process_one(self, curr)
@@ -296,5 +304,6 @@ class GithubCustom1Style(Style):
         Comment.Single:               comment_color + ' italic',
         Comment.Special:              comment_color + ' bold italic',
         Name.Constant:                '#008080', #'#445588', # '#004380', 
-        Name.Builtin.Pseudo:          '#004380 italic bold'
+        Name.Builtin.Pseudo:          '#004380 italic',
+        Keyword.Pseudo:               '#004380 italic bold'
     })

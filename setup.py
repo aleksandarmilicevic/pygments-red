@@ -27,7 +27,7 @@ setup(
                     [pygments.styles]
                     redstyle=pygments_red:RedStyle
                     github=pygments_red:GithubStyle
-                    github1=pygments_red:GithubCustom1Style''',
+                    githubcustom=pygments_red:GithubCustom1Style''',
 
     classifiers=[
     ],
