@@ -18,7 +18,8 @@ setup(
     install_requires=['pygments >= 1.4'],
 
     entry_points='''[pygments.lexers]
-                    redruby=pygments_red:RedRubyLexer
+                    ruby193=pygments_red:Ruby193Lexer
+                    alloy_ruby=pygments_red:AlloyRubyLexer
                     red=pygments_red:RedLexer
                     errb=pygments_red:ErrbLexer
                     ered=pygments_red:EredLexer

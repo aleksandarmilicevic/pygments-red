@@ -83,9 +83,9 @@ class RedLexerBase(RegexLexer):
 (2) Remove "name" from builtin keywords
 --------------------------------------------------------------------------------
 """
-class RedRubyLexer(RedLexerBase):
-    name = 'RedRuby'
-    aliases = ['redruby']
+class Ruby193Lexer(RedLexerBase):
+    name = 'Ruby193'
+    aliases = ['ruby193']
     filenames = ['*.rb'] # just to have one if you whant to use
 
     tokens = {}
@@ -110,34 +110,24 @@ class RedRubyLexer(RedLexerBase):
 (2) Converts tokens following class generating keywords in Red from
     Name.Constant to Name.Class
 
-(3) Emphasize certain Red builtin functions (e.g., 'render')
 --------------------------------------------------------------------------------
 """
-class RedLexer(RedRubyLexer):
-    name = 'Red'
-    aliases = ['red']
-    filenames = ['*.red'] # just to have one if you whant to use
+class AlloyRubyLexer(Ruby193Lexer):
+    name = 'AlloyRuby'
+    aliases = ['alloy_ruby']
+    filenames = ['*.arb'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['abstract_record', 'abstract_machine', 'record', 'machine', 'event', 'policy']
-    OTHER_KEYWORDS = ['set', 'seq', 'requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields']
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OTHER_KEYWORDS
+    CLASS_GEN_KEYWORDS = ['sig', 'abstract_sig', 'alloy_model', 'alloy_module', 'alloy']
+    OPS_KEYWORDS = ['set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact']
 
-    EMPH_STRONG_FUNCS = ['render']
-    EMPH_FUNCS = ['reject', 'unless', 'when']
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
     tokens = {}
-    tokens.update(RedRubyLexer.tokens)
+    tokens.update(Ruby193Lexer.tokens)
 
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
-
-        # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
-        if curr_token is Name and curr_value in self.EMPH_STRONG_FUNCS:
-            return (curr_idx, Keyword.Pseudo, curr_value)
-
-        # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
-        if curr_token is Name and curr_value in self.EMPH_FUNCS:
-            return (curr_idx, Name.Builtin.Pseudo, curr_value)
 
         # convert Name tokens to Keyword for extra Red keywobrds
         if curr_token is Name and curr_value in self.EXTRA_KEYWORDS:
@@ -150,13 +140,51 @@ class RedLexer(RedRubyLexer):
         if curr_token is Name.Constant and prev_is_red_keyword:
             return (curr_idx, Name.Class, curr_value)
 
-        return RedRubyLexer.process_one(self, curr)
+        return Ruby193Lexer.process_one(self, curr)
+
+"""
+--------------------------------------------------------------------------------
+(1) Adds new keywords
+
+(2) Converts tokens following class generating keywords in Red from
+    Name.Constant to Name.Class
+
+(3) Emphasize certain Red builtin functions (e.g., 'render')
+--------------------------------------------------------------------------------
+"""
+class RedLexer(AlloyRubyLexer):
+    name = 'Red'
+    aliases = ['red']
+    filenames = ['*.red'] # just to have one if you whant to use
+
+    CLASS_GEN_KEYWORDS = ['abstract_record', 'abstract_machine', 'record', 'machine', 'event', 'policy']
+    RED_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields']
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + RED_KEYWORDS + AlloyRubyLexer.OPS_KEYWORDS
+
+    EMPH_STRONG_FUNCS = ['render']
+    EMPH_FUNCS = ['reject', 'unless', 'when']
+
+    tokens = {}
+    tokens.update(Ruby193Lexer.tokens)
+
+    def process_one(self, curr):
+        curr_idx, curr_token, curr_value = curr
+
+        # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
+        if curr_token is Name and curr_value in self.EMPH_STRONG_FUNCS:
+            return (curr_idx, Keyword.Pseudo, curr_value)
+
+        # convert Name tokens to Name.Builtin.Pseudo for emphasized Red functions
+        if curr_token is Name and curr_value in self.EMPH_FUNCS:
+            return (curr_idx, Name.Builtin.Pseudo, curr_value)
+
+        return AlloyRubyLexer.process_one(self, curr)
 
 
 
 """
 --------------------------------------------------------------------------------
-Like ERB except that it uses RedRubyLexer for ruby expressions
+Like ERB except that it uses Ruby193Lexer for ruby expressions
 --------------------------------------------------------------------------------
 """
 class ErrbLexer(ErbLexer):
@@ -165,7 +193,7 @@ class ErrbLexer(ErbLexer):
     mimetypes = ['application/x-ruby-templating']
     def __init__(self, **options):
         ErbLexer.__init__(self, **options)
-        self.ruby_lexer = RedRubyLexer(**options)
+        self.ruby_lexer = Ruby193Lexer(**options)
 
 """
 --------------------------------------------------------------------------------
