@@ -112,10 +112,10 @@ class Ruby193Lexer(RedLexerBase):
 
 --------------------------------------------------------------------------------
 """
-class AlloyRubyLexer(Ruby193Lexer):
-    name = 'AlloyRuby'
-    aliases = ['alloy_ruby']
-    filenames = ['*.arb'] # just to have one if you whant to use
+class ARbyLexer(Ruby193Lexer):
+    name = 'ARby'
+    aliases = ['arby']
+    filenames = ['*.arby'] # just to have one if you whant to use
 
     CLASS_GEN_KEYWORDS = ['sig', 'abstract_sig', 'alloy_model', 'alloy_module', 'alloy']
     OPS_KEYWORDS = ['set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
@@ -146,26 +146,23 @@ class AlloyRubyLexer(Ruby193Lexer):
 --------------------------------------------------------------------------------
 (1) Adds new keywords
 
-(2) Converts tokens following class generating keywords in Red from
-    Name.Constant to Name.Class
-
-(3) Emphasize certain Red builtin functions (e.g., 'render')
+(2) Emphasize certain Red builtin functions (e.g., 'render')
 --------------------------------------------------------------------------------
 """
-class RedLexer(AlloyRubyLexer):
+class RedLexer(ARbyLexer):
     name = 'Red'
     aliases = ['red']
     filenames = ['*.red'] # just to have one if you whant to use
 
     CLASS_GEN_KEYWORDS = ['abstract_record', 'abstract_machine', 'record', 'machine', 'event', 'policy']
     RED_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields']
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + RED_KEYWORDS + AlloyRubyLexer.OPS_KEYWORDS
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + RED_KEYWORDS + ARbyLexer.OPS_KEYWORDS
 
     EMPH_STRONG_FUNCS = ['render']
     EMPH_FUNCS = ['reject', 'unless', 'when']
 
     tokens = {}
-    tokens.update(Ruby193Lexer.tokens)
+    tokens.update(ARbyLexer.tokens)
 
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
@@ -178,7 +175,37 @@ class RedLexer(AlloyRubyLexer):
         if curr_token is Name and curr_value in self.EMPH_FUNCS:
             return (curr_idx, Name.Builtin.Pseudo, curr_value)
 
-        return AlloyRubyLexer.process_one(self, curr)
+        return ARbyLexer.process_one(self, curr)
+
+
+"""
+--------------------------------------------------------------------------------
+(1) Adds new keywords
+--------------------------------------------------------------------------------
+"""
+class SeculloyLexer(ARbyLexer):
+    name = 'Seculloy'
+    aliases = ['seculloy']
+    filenames = ['*.sarb'] # just to have one if you whant to use
+
+    CLASS_GEN_KEYWORDS = ['view', 'mod', 'data', 'abstract_data', 'guard', 'effects', 'affects', 'sends', 'triggers']
+    SECULLOY_KEYWORDS = ['creates',  'nondet', 'operation']
+    STRONG_FUNCS = ['critical', 'trusted']
+    
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + SECULLOY_KEYWORDS + ARbyLexer.OPS_KEYWORDS
+
+    tokens = {}
+    tokens.update(ARbyLexer.tokens)
+
+    def process_one(self, curr):
+        curr_idx, curr_token, curr_value = curr
+
+        # convert Name tokens to Name.Function for emphasized functions
+        if curr_token is Name and curr_value in self.STRONG_FUNCS:
+            return (curr_idx, Name.Function, curr_value)
+
+
+        return ARbyLexer.process_one(self, curr)
 
 
 

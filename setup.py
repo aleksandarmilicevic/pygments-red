@@ -19,8 +19,9 @@ setup(
 
     entry_points='''[pygments.lexers]
                     ruby193=pygments_red:Ruby193Lexer
-                    alloy_ruby=pygments_red:AlloyRubyLexer
+                    arby=pygments_red:ARbyLexer
                     red=pygments_red:RedLexer
+                    seculloy=pygments_red:SeculloyLexer
                     errb=pygments_red:ErrbLexer
                     ered=pygments_red:EredLexer
                     redhtml=pygments_red:RedHtmlLexer
