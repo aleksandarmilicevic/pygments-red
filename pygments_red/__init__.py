@@ -189,7 +189,7 @@ class SlangLexer(ARbyLexer):
     filenames = ['*.sarb'] # just to have one if you whant to use
 
     CLASS_GEN_KEYWORDS = ['view', 'component', 'data', 'trusted', 'abstract', 'guard', 
-                          'effects', 'sends', 'triggers', 'critical', 'operation']
+                          'effects', 'sends', 'triggers', 'critical', 'operation', 'response']
     SLANG_KEYWORDS = ['creates']
     STRONG_FUNCS = ['critical', 'trusted']
     
