@@ -117,9 +117,9 @@ class ARbyLexer(Ruby193Lexer):
     aliases = ['arby']
     filenames = ['*.arby'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['sig', 'abstract_sig', 'alloy_model', 'alloy_module', 'alloy']
-    OPS_KEYWORDS = ['set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
-    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact']
+    CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy']
+    OPS_KEYWORDS = ['extends', 'set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run']
 
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
@@ -183,16 +183,17 @@ class RedLexer(ARbyLexer):
 (1) Adds new keywords
 --------------------------------------------------------------------------------
 """
-class SeculloyLexer(ARbyLexer):
-    name = 'Seculloy'
-    aliases = ['seculloy']
+class SlangLexer(ARbyLexer):
+    name = 'Slang'
+    aliases = ['slang']
     filenames = ['*.sarb'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['view', 'mod', 'data', 'abstract_data', 'guard', 'effects', 'affects', 'sends', 'triggers']
-    SECULLOY_KEYWORDS = ['creates',  'nondet', 'operation']
+    CLASS_GEN_KEYWORDS = ['view', 'component', 'data', 'trusted', 'abstract', 'guard', 
+                          'effects', 'sends', 'triggers', 'critical', 'operation']
+    SLANG_KEYWORDS = ['creates']
     STRONG_FUNCS = ['critical', 'trusted']
     
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + SECULLOY_KEYWORDS + ARbyLexer.OPS_KEYWORDS
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + SLANG_KEYWORDS + ARbyLexer.OPS_KEYWORDS
 
     tokens = {}
     tokens.update(ARbyLexer.tokens)
