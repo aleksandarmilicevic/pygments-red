@@ -190,7 +190,7 @@ class SlangLexer(ARbyLexer):
 
     CLASS_GEN_KEYWORDS = ['view', 'component', 'data', 'trusted', 'abstract', 'guard', 
                           'effects', 'sends', 'triggers', 'critical', 'operation', 'response']
-    SLANG_KEYWORDS = ['creates']
+    SLANG_KEYWORDS = ['creates', 'dynamic']
     STRONG_FUNCS = ['critical', 'trusted']
     
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + SLANG_KEYWORDS + ARbyLexer.OPS_KEYWORDS
