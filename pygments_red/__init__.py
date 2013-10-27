@@ -155,7 +155,7 @@ class RedLexer(ARbyLexer):
     filenames = ['*.red'] # just to have one if you whant to use
 
     CLASS_GEN_KEYWORDS = ['abstract_record', 'abstract_machine', 'record', 'machine', 'event', 'policy']
-    RED_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields']
+    RED_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'principal', 'restrict', 'refs', 'owns', 'fields', 'success_note', 'error_note', 'global', 'write', 'filter', 'read']
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + RED_KEYWORDS + ARbyLexer.OPS_KEYWORDS
 
     EMPH_STRONG_FUNCS = ['render']
