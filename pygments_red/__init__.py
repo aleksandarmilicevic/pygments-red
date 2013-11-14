@@ -188,12 +188,12 @@ class SlangLexer(ARbyLexer):
     aliases = ['slang']
     filenames = ['*.sarb'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['view', 'component', 'data', 'trusted', 'abstract', 'guard', 
-                          'effects', 'sends', 'triggers', 'critical', 'operation', 'response']
-    SLANG_KEYWORDS = ['creates', 'dynamic']
+    CLASS_GEN_KEYWORDS = ['view', 'component', 'data', 'trusted', 'abstract', 'model',
+                          'critical', 'operation']
+    SLANG_KEYWORDS = ['creates', 'guard', 'dynamic', 'effects', 'sends', 'triggers', 'response']
     STRONG_FUNCS = ['critical', 'trusted']
     
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + SLANG_KEYWORDS + ARbyLexer.OPS_KEYWORDS
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + ARbyLexer.OPS_KEYWORDS
 
     tokens = {}
     tokens.update(ARbyLexer.tokens)
@@ -205,6 +205,13 @@ class SlangLexer(ARbyLexer):
         if curr_token is Name and curr_value in self.STRONG_FUNCS:
             return (curr_idx, Name.Function, curr_value)
 
+        # convert Name tokens to Name.Function for SLANG_KEYWORDS
+        if curr_token is Name and curr_value in self.SLANG_KEYWORDS:
+            return (curr_idx, Generic.Inserted, curr_value)
+
+        # convert braces to Operator to make them bold
+        if curr_value in ['{', '}']:
+            return (curr_idx, Operator, curr_value)
 
         return ARbyLexer.process_one(self, curr)
 
@@ -305,7 +312,7 @@ class GithubStyle(Style):
         Keyword.Constant:             '#000000 bold',
         Keyword.Declaration:          '#000000 bold',
         Keyword.Namespace:            '#000000 bold',
-        Keyword.Pseudo:               '#000000 bold',
+        Keyword.Pseudo:               '#008080 bold',
         Keyword.Reserved:             '#000000 bold',
         Keyword.Type:                 '#445588 bold',
         Literal.Number:               '#009999',
