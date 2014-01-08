@@ -119,7 +119,7 @@ class ARbyLexer(Ruby193Lexer):
 
     CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy']
     OPS_KEYWORDS = ['extends', 'set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
-    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this']
 
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
@@ -139,6 +139,10 @@ class ARbyLexer(Ruby193Lexer):
         prev_is_red_keyword = prev_is_keyword and _value(self.prev()) in self.CLASS_GEN_KEYWORDS
         if curr_token is Name.Constant and prev_is_red_keyword:
             return (curr_idx, Name.Class, curr_value)
+
+        # convert braces to Operator to make them bold
+        if curr_value in ['{', '}']:
+            return (curr_idx, Operator, curr_value)
 
         return Ruby193Lexer.process_one(self, curr)
 
@@ -208,10 +212,6 @@ class SlangLexer(ARbyLexer):
         # convert Name tokens to Name.Function for SLANG_KEYWORDS
         if curr_token is Name and curr_value in self.SLANG_KEYWORDS:
             return (curr_idx, Generic.Inserted, curr_value)
-
-        # convert braces to Operator to make them bold
-        if curr_value in ['{', '}']:
-            return (curr_idx, Operator, curr_value)
 
         return ARbyLexer.process_one(self, curr)
 
