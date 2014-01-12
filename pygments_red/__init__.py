@@ -126,8 +126,8 @@ class ARbyLexer(Ruby193Lexer):
 
     CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy']
     OPS_KEYWORDS = ['extends', 'set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
-    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?',
-                    'ordered', 'enum', 'iden', 'univ', 'let', 'one_one', 'one_lone', 'lone_one', 'lone_one']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open',
+                    'exactly', 'ordered', 'enum', 'iden', 'univ', 'let', 'one_one', 'one_lone', 'lone_one', 'lone_one']
 
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
@@ -138,7 +138,7 @@ class ARbyLexer(Ruby193Lexer):
         curr_idx, curr_token, curr_value = curr
 
         # convert Name tokens to Keyword for extra Red keywobrds
-        if curr_token is Name and curr_value in self.EXTRA_KEYWORDS:
+        if curr_value in self.EXTRA_KEYWORDS:
             return (curr_idx, Keyword, curr_value)
 
         # convert Name.Constant tokens to Name.Class for names following Red class generating keywords
