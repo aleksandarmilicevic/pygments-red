@@ -101,6 +101,13 @@ class Ruby193Lexer(RedLexerBase):
         if curr_value == "name" and curr_token is Name.Builtin and _token(self.next()) is Token.Punctuation:
             return (curr_idx, Literal.String.Symbol, curr_value)
 
+        if curr_value == "p" and curr_token is Name.Builtin:
+            nt = self.next()
+            if _token(nt) is Token.Punctuation and _value(nt) == ":":
+                return (curr_idx, Literal.String.Symbol, curr_value)
+            else:
+                return (curr_idx, Name, curr_value)
+
         return curr
 
 """
