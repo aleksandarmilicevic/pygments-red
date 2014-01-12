@@ -119,7 +119,8 @@ class ARbyLexer(Ruby193Lexer):
 
     CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy']
     OPS_KEYWORDS = ['extends', 'set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
-    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'ordered', 'enum', 'iden', 'univ', 'let']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?',
+                    'ordered', 'enum', 'iden', 'univ', 'let', 'one_one', 'one_lone', 'lone_one', 'lone_one']
 
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
