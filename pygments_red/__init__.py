@@ -28,16 +28,21 @@ def _value(t): return (t[2] if t is not None else None)
 """
 class RedLexerBase(RegexLexer):
 
-    lookahead = 1
+    lookahead = 10
     lookbehind = 1
     queue = collections.deque()
+    nows_queue = collections.deque()
     processed = collections.deque([], lookbehind)
 
+    def peek_ahead(self, n):
+        if len(self.nows_queue) >= n:
+            return self.nows_queue[n-1]
+        else:
+            return (None, None, None)
+
     def next(self):
-            if len(self.queue) > 0:
-                return self.queue[0]
-            else:
-                return (None, None, None)
+        return self.peek_ahead(1)
+
     def prev(self):
         if len(self.processed) > 0:
             return self.processed[-1]
@@ -56,14 +61,21 @@ class RedLexerBase(RegexLexer):
 
         for index, token, value in RegexLexer.get_tokens_unprocessed(self, text):
             self.queue.append((index, token, value))
-            if len(self.queue) < 1 + self.lookahead: continue
+            if token is not Token.Text:
+                self.nows_queue.append((index, token, value))
+            if len(self.nows_queue) < 1 + self.lookahead: continue
             curr = self.queue.popleft()
+            if _token(curr) is not Token.Text:
+                self.nows_queue.popleft()
             ans = __process(self.process_one(curr))
             if ans is not None:
                 yield ans
 
         while (len(self.queue) > 0):
-            ans = __process(self.process_one(self.queue.popleft()))
+            curr = self.queue.popleft()
+            if _token(curr) is not Token.Text:
+                self.nows_queue.popleft()
+            ans = __process(self.process_one(curr))
             if ans is not None: yield ans
 
 """
@@ -134,6 +146,14 @@ class ARbyLexer(Ruby193Lexer):
     tokens = {}
     tokens.update(Ruby193Lexer.tokens)
 
+    def to_conv_to_sym(self):
+        ans = []
+        if hasattr(self, "my_to_conv_to_sym"):
+            ans = self.my_to_conv_to_sym
+        else:
+            self.my_to_conv_to_sym = []
+        return ans
+
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
 
@@ -151,6 +171,29 @@ class ARbyLexer(Ruby193Lexer):
         # convert braces to Operator to make them bold
         if curr_value in ['{', '}']:
             return (curr_idx, Operator, curr_value)
+
+        # convert named variables to simbols when preceeded by "[" and followed by ","
+        if curr in self.to_conv_to_sym():
+            return (curr_idx, Literal.String.Symbol, curr_value)
+        elif curr_token is Name and (_value(self.prev()) in ["[", "("]): 
+            nx = 1
+            yes = False
+            while(1):
+                #import pdb; pdb.set_trace()
+                if _value(self.peek_ahead(nx)) == ",":
+                    nextnext = self.peek_ahead(nx+1)
+                    if _token(nextnext) is Literal.String.Symbol:
+                        yes = True
+                        break
+                    else:
+                        self.to_conv_to_sym().append(nextnext)
+                        nx = nx + 2
+                else:
+                    yes = False
+                    del self.to_conv_to_sym()[:]
+                    break
+            if yes:
+                return (curr_idx, Literal.String.Symbol, curr_value)
 
         return Ruby193Lexer.process_one(self, curr)
 
