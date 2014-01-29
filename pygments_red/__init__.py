@@ -136,10 +136,10 @@ class ARbyLexer(Ruby193Lexer):
     aliases = ['arby']
     filenames = ['*.arby'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy']
+    CLASS_GEN_KEYWORDS = ['sig', 'abstract', 'alloy_model', 'alloy_module', 'alloy', 'enum']
     OPS_KEYWORDS = ['extends', 'set', 'seq', 'one', 'lone', 'no', 'all', 'some', 'exist']
-    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 'solve', 'procedure',
-                    'exactly', 'ordered', 'enum', 'iden', 'univ', 'let', 'one_one', 'one_lone', 'lone_one', 'lone_one']
+    FUN_KEYWORDS = ['fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 'solve', 'procedure', 'inst',
+                    'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 'one_lone', 'lone_one', 'lone_one']
 
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + OPS_KEYWORDS + FUN_KEYWORDS
 
