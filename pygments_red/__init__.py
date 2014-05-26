@@ -11,7 +11,7 @@ from pygments.lexers.web import HtmlLexer
 from pygments.lexer import bygroups, DelegatingLexer
 from pygments.lexers.agile import RubyLexer, RegexLexer
 from pygments.lexers.templates import ErbLexer
-from pygments.token import Token, Text, Keyword, Name, Comment, String, Error, Number, Operator, Generic, Literal
+from pygments.token import Token, Text, Keyword, Name, Comment, String, Error, Number, Operator, Generic, Literal, Punctuation
 
 import sys
 import collections
@@ -169,7 +169,7 @@ class ARbyLexer(Ruby193Lexer):
             return (curr_idx, Name.Class, curr_value)
 
         # convert braces to Operator to make them bold
-        if curr_value in ['{', '}']:
+        if curr_value in ['{', '}'] and curr_token is Token.Punctuation:
             return (curr_idx, Operator, curr_value)
 
         # convert named variables to simbols when preceeded by "[" and followed by ","
