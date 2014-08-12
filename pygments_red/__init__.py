@@ -10,6 +10,7 @@
 from pygments.lexers.web import HtmlLexer
 from pygments.lexer import bygroups, DelegatingLexer
 from pygments.lexers.agile import RubyLexer, RegexLexer
+from pygments.lexers.web import CoffeeScriptLexer
 from pygments.lexers.templates import ErbLexer
 from pygments.token import Token, Text, Keyword, Name, Comment, String, Error, Number, Operator, Generic, Literal, Punctuation
 
@@ -232,6 +233,29 @@ class RedLexer(ARbyLexer):
 
         return ARbyLexer.process_one(self, curr)
 
+class SunnyLexer(RedLexerBase):
+    name = 'Sunny'
+    aliases = ['sunny']
+    filenames = ['*.sunny'] # just to have one if you whant to use
+
+    CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server']
+    FUN_KEYWORDS = ['simport', 'requires', 'ensures', 'from', 'to', 'params', 'set', 'compose'] 
+                      # 'fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 
+                      # 'solve', 'procedure', 'inst', 'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 
+                      # 'one_lone', 'lone_one', 'lone_one']
+    
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS
+
+    tokens = {}
+    tokens.update(CoffeeScriptLexer.tokens)
+
+    def process_one(self, curr):
+        curr_idx, curr_token, curr_value = curr
+
+        if curr_value in self.EXTRA_KEYWORDS:
+            return (curr_idx, Keyword, curr_value)
+
+        return curr
 
 """
 --------------------------------------------------------------------------------

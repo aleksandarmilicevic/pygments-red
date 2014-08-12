@@ -21,6 +21,7 @@ setup(
                     ruby193=pygments_red:Ruby193Lexer
                     arby=pygments_red:ARbyLexer
                     red=pygments_red:RedLexer
+                    sunny=pygments_red:SunnyLexer
                     slang=pygments_red:SlangLexer
                     errb=pygments_red:ErrbLexer
                     ered=pygments_red:EredLexer
