@@ -238,13 +238,17 @@ class SunnyLexer(RedLexerBase):
     aliases = ['sunny']
     filenames = ['*.sunny'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server']
-    FUN_KEYWORDS = ['simport', 'requires', 'ensures', 'from', 'to', 'params', 'set', 'compose'] 
+    CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server', 'policy']
+    FUN_KEYWORDS = ['simport', 'set', 'compose'] 
+    SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params']
+    SYM_COLON_KEYWORDS = [(s + ":") for s in SYM_KEYWORDS]
                       # 'fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 
                       # 'solve', 'procedure', 'inst', 'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 
                       # 'one_lone', 'lone_one', 'lone_one']
     
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS + SYM_KEYWORDS
+
+    print SYM_COLON_KEYWORDS
 
     tokens = {}
     tokens.update(CoffeeScriptLexer.tokens)
@@ -253,7 +257,10 @@ class SunnyLexer(RedLexerBase):
         curr_idx, curr_token, curr_value = curr
 
         if curr_value in self.EXTRA_KEYWORDS:
-            return (curr_idx, Keyword, curr_value)
+            return (curr_idx, Keyword.Pseudo, curr_value)
+        
+        if curr_value.strip() in self.SYM_COLON_KEYWORDS:
+            return (curr_idx, Keyword.Pseudo, curr_value)
 
         return curr
 
