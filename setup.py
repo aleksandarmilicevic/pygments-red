@@ -22,6 +22,8 @@ setup(
                     arby=pygments_red:ARbyLexer
                     red=pygments_red:RedLexer
                     sunny=pygments_red:SunnyLexer
+                    handlebars=pygments_red:HandlebarsLexer
+                    html+handlebars=pygments_red:HandlebarsHtmlLexer
                     slang=pygments_red:SlangLexer
                     errb=pygments_red:ErrbLexer
                     ered=pygments_red:EredLexer

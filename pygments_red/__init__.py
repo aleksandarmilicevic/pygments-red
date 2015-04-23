@@ -12,7 +12,7 @@ from pygments.lexer import bygroups, DelegatingLexer
 from pygments.lexers.agile import RubyLexer, RegexLexer
 from pygments.lexers.web import CoffeeScriptLexer
 from pygments.lexers.templates import ErbLexer
-from pygments.token import Token, Text, Keyword, Name, Comment, String, Error, Number, Operator, Generic, Literal, Punctuation
+from pygments.token import Token, Text, Keyword, Name, Comment, String, Error, Number, Operator, Generic, Literal, Punctuation, Other
 
 import sys
 import collections
@@ -240,28 +240,33 @@ class SunnyLexer(RedLexerBase):
 
     CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server', 'policy']
     FUN_KEYWORDS = ['simport', 'set', 'compose'] 
-    SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params']
+    SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'read', 'update', 'create', 'delete', '_precondition', 'precondition']
     SYM_COLON_KEYWORDS = [(s + ":") for s in SYM_KEYWORDS]
                       # 'fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 
                       # 'solve', 'procedure', 'inst', 'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 
                       # 'one_lone', 'lone_one', 'lone_one']
+    AUX_FUNS = ['map', 'filter', 'findFirst', 'fold', 'contains', 'remove']
     
-    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS + SYM_KEYWORDS
+    EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS 
 
-    print SYM_COLON_KEYWORDS
+    # print SYM_COLON_KEYWORDS
 
-    tokens = {}
+    tokens = {} 
     tokens.update(CoffeeScriptLexer.tokens)
 
     def process_one(self, curr):
         curr_idx, curr_token, curr_value = curr
-
-        if curr_value in self.EXTRA_KEYWORDS:
+        # print curr_token
+        # print curr_value
+        # print "-----"
+        if curr_value in self.EXTRA_KEYWORDS and _value(self.prev()) not in ["."]:
             return (curr_idx, Keyword.Pseudo, curr_value)
         
         if curr_value.strip() in self.SYM_COLON_KEYWORDS:
             return (curr_idx, Keyword.Pseudo, curr_value)
 
+        if curr_value in self.AUX_FUNS:
+            return (curr_idx, Name.Builtin.Pseudo, curr_value)
         return curr
 
 """
@@ -345,6 +350,69 @@ class RedHtmlLexer(DelegatingLexer):
             # one more than the XmlErbLexer returns
             rv += 0.5
         return rv
+
+# ----------------------------------------------------
+
+class HandlebarsLexer(RegexLexer):
+    """
+    Generic `handlebars <http://handlebarsjs.com/>` template lexer.
+
+    Highlights only the Handlebars template tags (stuff between `{{` and `}}`).
+    Everything else is left for a delegating lexer.
+    """
+
+    name = "Handlebars"
+    aliases = ['handlebars']
+
+    tokens = {
+        'root': [
+            (r'[^{]+', Other),
+
+            (r'{{!.*}}', Comment),
+
+            (r'({{{)(\s*)', bygroups(Comment.Special, Text), 'tag'),
+            (r'({{)(\s*)', bygroups(Comment.Preproc, Text), 'tag'),
+        ],
+
+        'tag': [
+            (r'\s+', Text),
+            (r'\}\}\}', Comment.Special, '#pop'),
+            (r'\}\}', Comment.Preproc, '#pop'),
+
+            # Handlebars
+            (r'([\#/]*)(each|if|unless|else|with|log|in)', bygroups(Keyword, 
+             Keyword)),
+
+            # General {{#block}}
+            (r'([\#/])(\w+)', bygroups(Name.Function, Name.Function)),
+
+            # {{opt=something}}
+            (r'(\w+)(=)', bygroups(Name.Attribute, Operator)),
+
+            # borrowed from DjangoLexer
+            (r':?"(\\\\|\\"|[^"])*"', String.Double),
+            (r":?'(\\\\|\\'|[^'])*'", String.Single),
+            (r'[a-zA-Z][a-zA-Z0-9_-]*', Name.Variable),
+            (r'\.[a-zA-Z0-9_]+', Name.Variable),
+            (r"[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|"
+             r"0[xX][0-9a-fA-F]+[Ll]?", Number),
+        ]
+    }
+
+
+class HandlebarsHtmlLexer(DelegatingLexer):
+    """
+    Subclass of the `HandlebarsLexer` that highlights unlexed data with the 
+    `HtmlLexer`.
+    """
+
+    name = "HTML+Handlebars"
+    aliases = ["html+handlebars"]
+    filenames = ['*.handlebars', '*.hbs']
+    mimetypes = ['text/html+handlebars', 'text/x-handlebars-template']
+
+    def __init__(self, **options):
+        super(HandlebarsHtmlLexer, self).__init__(HtmlLexer, HandlebarsLexer, **options)
 
 ############################################################################
 
