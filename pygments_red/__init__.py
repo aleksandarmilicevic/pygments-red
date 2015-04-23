@@ -240,7 +240,7 @@ class SunnyLexer(RedLexerBase):
 
     CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server', 'policy']
     FUN_KEYWORDS = ['simport', 'set', 'compose'] 
-    SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'read', 'update', 'create', 'delete', '_precondition', 'precondition', 'push', 'pull', 'find']
+    SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'read', 'update', 'create', 'destroy', 'delete', '_precondition', 'precondition', 'push', 'pull', 'find']
     SYM_COLON_KEYWORDS = [(s + ":") for s in SYM_KEYWORDS]
                       # 'fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 
                       # 'solve', 'procedure', 'inst', 'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 
