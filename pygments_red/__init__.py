@@ -245,7 +245,7 @@ class SunnyLexer(RedLexerBase):
                       # 'fun', 'pred', 'assertion', 'fact', 'check', 'run', 'this', 'not_in?', 'in?', 'open', 
                       # 'solve', 'procedure', 'inst', 'exactly', 'ordered', 'iden', 'univ', 'let', 'one_one', 
                       # 'one_lone', 'lone_one', 'lone_one']
-    AUX_FUNS = ['map', 'filter', 'filterNot', 'fold', 'findFirst', 'fold', 'contains', 'remove', 'some', 'all', 'containsAll', 'allow', 'deny']
+    AUX_FUNS = ['map', 'filter', 'filterNot', 'fold', 'findFirst', 'fold', 'contains', 'remove', 'some', 'all', 'containsAll', 'allow', 'deny', 'equals']
     
     EXTRA_KEYWORDS = CLASS_GEN_KEYWORDS + FUN_KEYWORDS 
 
