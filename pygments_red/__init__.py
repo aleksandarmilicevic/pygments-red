@@ -238,7 +238,7 @@ class SunnyLexer(RedLexerBase):
     aliases = ['sunny']
     filenames = ['*.sunny'] # just to have one if you whant to use
 
-    CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server', 'policy']
+    CLASS_GEN_KEYWORDS = ['record', 'abstract', 'event', 'machine', 'user', 'client', 'server', 'policy', 'write_policy', 'read_policy']
     FUN_KEYWORDS = ['simport', 'set', 'compose', 'seq'] 
     SYM_KEYWORDS = ['requires', 'ensures', 'from', 'to', 'params', 'read', 'update', 'create', 'destroy', 'delete', '_precondition', 'precondition', 'push', 'pull', 'find']
     SYM_COLON_KEYWORDS = [(s + ":") for s in SYM_KEYWORDS]
